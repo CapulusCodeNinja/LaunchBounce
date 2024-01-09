@@ -20,8 +20,10 @@
 #include <iostream>
 #include <filesystem>
 #include <fstream>
+#include "Configuration.h"
 
 using Therena::LaunchBounce::Logger;
+using Therena::LaunchBounce::Configuration;
 
 void Logger::Info(const std::wstring& message)
 {
@@ -46,12 +48,7 @@ void Logger::WriteLog(const std::wstring& message)
 {
     std::wcout << message << std::endl;
 
-    wchar_t pathBuffer[MAX_PATH + 1];
-    ::GetModuleFileNameW(nullptr, pathBuffer, MAX_PATH);
-
-    std::filesystem::path path = pathBuffer;
-    const auto logFilePath = path.replace_extension(L".log");
-
+    const auto logFilePath = Configuration::GetAppPath().replace_extension(L".log");
 
     std::wofstream fileStream(logFilePath, std::ios_base::app);
 

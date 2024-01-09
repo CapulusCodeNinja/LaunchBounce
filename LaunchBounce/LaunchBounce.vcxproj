@@ -19,10 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Configuration.cpp" />
     <ClCompile Include="Source\LaunchBounce.cpp" />
     <ClCompile Include="Source\Logger.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Configuration.h" />
     <ClInclude Include="Source\Logger.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

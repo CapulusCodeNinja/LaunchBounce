@@ -13,18 +13,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-#include "Logger.h"
 #include "Configuration.h"
+#include <Windows.h>
 
-using Therena::LaunchBounce::Logger;
 using Therena::LaunchBounce::Configuration;
 
-int wmain(int argc, wchar_t* argv[])
+void Configuration::Initialize(int argc, wchar_t* argv[])
 {
-    Configuration::Initialize(argc, argv);
 
-    Logger::Info(L"##################################################################################");
-    Logger::Info(L"Execute launch bounce");
-    Logger::Info(L"##################################################################################");
 }
 
+std::filesystem::path Configuration::GetAppPath()
+{
+    wchar_t pathBuffer[MAX_PATH + 1];
+    ::GetModuleFileNameW(nullptr, pathBuffer, MAX_PATH);
+    return pathBuffer;
+}

@@ -13,18 +13,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-#include "Logger.h"
-#include "Configuration.h"
+#pragma once
 
-using Therena::LaunchBounce::Logger;
-using Therena::LaunchBounce::Configuration;
+#include <filesystem>
 
-int wmain(int argc, wchar_t* argv[])
+namespace Therena::LaunchBounce
 {
-    Configuration::Initialize(argc, argv);
+    class Configuration final
+    {
+    public:
+        Configuration() = delete;
 
-    Logger::Info(L"##################################################################################");
-    Logger::Info(L"Execute launch bounce");
-    Logger::Info(L"##################################################################################");
+        static void Initialize(int argc, wchar_t* argv[]);
+
+        static std::filesystem::path GetAppPath();
+    };
 }
-
