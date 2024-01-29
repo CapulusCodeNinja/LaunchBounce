@@ -28,19 +28,20 @@ using Therena::LaunchBounce::Configuration;
 void Logger::Info(const std::wstring& message)
 {
     std::unique_lock lock(GetMutex());
-    WriteLog(GetTime() + L" [INFO] [" + std::to_wstring(GetCurrentThreadId()) + L"] " + message);
+    int i = 1;
+    WriteLog(GetTime() + L" [INFO] [" + std::format(L"{:0>6}", GetCurrentThreadId()) + L"] " + message);
 }
 
 void Logger::Warning(const std::wstring& message)
 {
     std::unique_lock lock(GetMutex());
-    WriteLog(GetTime() + L" [WARN] [" + std::to_wstring(GetCurrentThreadId()) + L"] " + message);
+    WriteLog(GetTime() + L" [WARN] [" + std::format(L"{:0>6}", GetCurrentThreadId()) + L"] " + message);
 }
 
 void Logger::Error(const std::wstring& message)
 {
     std::unique_lock lock(GetMutex());
-    WriteLog(GetTime() + L" [ERROR] [" + std::to_wstring(GetCurrentThreadId()) + L"] " + message);
+    WriteLog(GetTime() + L" [ERROR] [" + std::format(L"{:0>6}", GetCurrentThreadId()) + L"] " + message);
 }
 
 

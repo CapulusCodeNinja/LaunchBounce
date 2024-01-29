@@ -15,33 +15,39 @@
 //
 #pragma once
 
-#include <map>
 #include <filesystem>
+#include <Windows.h>
+#include "StandardPipe.h"
 
 namespace Therena::LaunchBounce
 {
-    class Configuration final
+    class Process final
     {
+    private:
+        Process(const PROCESS_INFORMATION& processInformation,
+            const std::shared_ptr<StandardPipe>& errorPipe,
+            const std::shared_ptr<StandardPipe>& outputPipe);
+
+        ~Process();
+
+        std::vector<unsigned char> ReadPipe();
+
+        void ReadProcessPipes();
+
+        bool IsRunning();
+
+        void Wait();
+
+        int GetExitCode() const;
+
+        void PrintData(std::vector<unsigned char> data);
+
     public:
-        Configuration() = delete;
-
-        static void Initialize(int argc, wchar_t* argv[]);
-
-        static std::filesystem::path GetAppPath();
-
-        enum class ParameterType
-        {
-            Unknown,
-            Process,
-            Parameter
-        };
-
-        static bool GetParameter(ParameterType type, std::wstring& parameter);
+        static int Launch();
 
     private:
-        static bool ConvertParameterType(const std::wstring& parameter, ParameterType& type);
-
-    private:
-        inline static std::map<ParameterType, std::wstring> m_Parameters{};
+        PROCESS_INFORMATION m_ProcessInformation{};
+        std::shared_ptr<StandardPipe> m_ErrorPipe{};
+        std::shared_ptr<StandardPipe> m_OutputPipe{};
     };
 }

@@ -14,9 +14,12 @@
 // limitations under the License.
 //
 #include "Logger.h"
+#include "Process.h"
 #include "Configuration.h"
+#include <Windows.h>
 
 using Therena::LaunchBounce::Logger;
+using Therena::LaunchBounce::Process;
 using Therena::LaunchBounce::Configuration;
 
 int wmain(int argc, wchar_t* argv[])
@@ -26,5 +29,18 @@ int wmain(int argc, wchar_t* argv[])
     Logger::Info(L"##################################################################################");
     Logger::Info(L"Execute launch bounce");
     Logger::Info(L"##################################################################################");
+
+    const auto result = Process::Launch();
+
+    if (ERROR_SUCCESS != result)
+    {
+        Logger::Error(L"Execution finished with error code: " + std::to_wstring(result));
+    }
+    else
+    {
+        Logger::Info(L"Execution finished successfully");
+    }
+
+    return result;
 }
 

@@ -22,11 +22,15 @@
     <ClCompile Include="Source\Configuration.cpp" />
     <ClCompile Include="Source\LaunchBounce.cpp" />
     <ClCompile Include="Source\Logger.cpp" />
+    <ClCompile Include="Source\Process.cpp" />
+    <ClCompile Include="Source\StandardPipe.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Configuration.h" />
     <ClInclude Include="Source\Logger.h" />
+    <ClInclude Include="Source\Process.h" />
     <ClInclude Include="Source\resource.h" />
+    <ClInclude Include="Source\StandardPipe.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Source\LaunchBounce.rc" />

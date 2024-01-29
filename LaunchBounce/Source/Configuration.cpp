@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
+#include "Logger.h"
 #include "Configuration.h"
 #include <Windows.h>
 
@@ -20,7 +21,49 @@ using Therena::LaunchBounce::Configuration;
 
 void Configuration::Initialize(int argc, wchar_t* argv[])
 {
+    if (0 == argc || argc % 2 == 0)
+    {
+        return;
+    }
 
+    for (auto i = 1; i < argc; i = i + 2)
+    {
+        auto type = ParameterType::Unknown;
+        const auto result = ConvertParameterType(argv[i], type);
+        if (result)
+        {
+            m_Parameters[type] = argv[i + 1];
+        }
+    }
+}
+
+bool Configuration::GetParameter(ParameterType type, std::wstring& parameter)
+{
+    if (m_Parameters.end() == m_Parameters.find(type))
+    {
+        return false;
+    }
+
+    parameter = m_Parameters[type];
+
+    return true;
+}
+
+bool Configuration::ConvertParameterType(const std::wstring& parameter, ParameterType& type)
+{
+    if (std::wstring::npos != parameter.find(L"Process"))
+    {
+        type = ParameterType::Process;
+        return true;
+    }
+
+    if (std::wstring::npos != parameter.find(L"Parameter"))
+    {
+        type = ParameterType::Parameter;
+        return true;
+    }
+
+    return false;
 }
 
 std::filesystem::path Configuration::GetAppPath()

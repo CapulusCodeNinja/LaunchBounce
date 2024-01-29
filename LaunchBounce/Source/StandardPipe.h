@@ -15,33 +15,25 @@
 //
 #pragma once
 
-#include <map>
-#include <filesystem>
+#include <Windows.h>
+#include <string>
 
 namespace Therena::LaunchBounce
 {
-    class Configuration final
+    class StandardPipe final
     {
     public:
-        Configuration() = delete;
+        StandardPipe(const std::wstring& type);
 
-        static void Initialize(int argc, wchar_t* argv[]);
+        ~StandardPipe();
 
-        static std::filesystem::path GetAppPath();
+        HANDLE GetRead();
 
-        enum class ParameterType
-        {
-            Unknown,
-            Process,
-            Parameter
-        };
-
-        static bool GetParameter(ParameterType type, std::wstring& parameter);
+        HANDLE GetWrite();
 
     private:
-        static bool ConvertParameterType(const std::wstring& parameter, ParameterType& type);
-
-    private:
-        inline static std::map<ParameterType, std::wstring> m_Parameters{};
+        HANDLE m_Read{};
+        HANDLE m_Write{};
+        std::wstring m_Type;
     };
 }
