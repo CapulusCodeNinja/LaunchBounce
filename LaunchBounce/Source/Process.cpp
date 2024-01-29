@@ -109,6 +109,8 @@ std::vector<unsigned char> Process::ReadPipe()
 
 void Process::ReadProcessPipes()
 {
+    Logger::Info(L"----------------------------------------------------------------------------------");
+
     while (IsRunning())
     {
         const auto result = ReadPipe();
@@ -121,12 +123,12 @@ void Process::ReadProcessPipes()
     }
 
     const auto result = ReadPipe();
-    if (0 == result.size())
+    if (0 != result.size())
     {
-        return;
+        PrintData(result);
     }
 
-    PrintData(result);
+    Logger::Info(L"----------------------------------------------------------------------------------");
 }
 
 bool Process::IsRunning()
@@ -163,6 +165,8 @@ int Process::Launch()
     {
         cmdLine += L" " + parameter;
     }
+
+    Logger::Info(std::format(L"Launch the application: {}", cmdLine));
 
     SECURITY_ATTRIBUTES processAttributes{};
     SECURITY_ATTRIBUTES threadAttributes{};
