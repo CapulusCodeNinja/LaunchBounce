@@ -180,6 +180,14 @@ int Process::Launch()
     startupInfo.hStdError = errorPipe->GetWrite();
     startupInfo.dwFlags |= STARTF_USESTDHANDLES;
 
+    std::wstring hide;
+    const auto hideResult = Configuration::GetParameter(Configuration::ParameterType::Hide, hide);
+    if (hideResult)
+    {
+        startupInfo.dwFlags |= STARTF_USESHOWWINDOW;
+        startupInfo.wShowWindow = SW_HIDE;
+    }
+
     PROCESS_INFORMATION processInformation{};
 
     const auto processCreation = CreateProcess(nullptr,

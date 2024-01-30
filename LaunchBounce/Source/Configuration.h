@@ -25,7 +25,7 @@ namespace Therena::LaunchBounce
     public:
         Configuration() = delete;
 
-        static void Initialize(int argc, wchar_t* argv[]);
+        static void Initialize();
 
         static std::filesystem::path GetAppPath();
 
@@ -33,13 +33,16 @@ namespace Therena::LaunchBounce
         {
             Unknown,
             Process,
-            Parameter
+            Parameter,
+            Hide
         };
 
         static bool GetParameter(ParameterType type, std::wstring& parameter);
 
     private:
         static bool ConvertParameterType(const std::wstring& parameter, ParameterType& type);
+
+        static std::vector<std::pair<std::wstring, std::wstring>> ParseCommandLine(const std::wstring& commandLine);
 
     private:
         inline static std::map<ParameterType, std::wstring> m_Parameters{};

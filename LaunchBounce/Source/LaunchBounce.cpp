@@ -22,9 +22,14 @@ using Therena::LaunchBounce::Logger;
 using Therena::LaunchBounce::Process;
 using Therena::LaunchBounce::Configuration;
 
-int wmain(int argc, wchar_t* argv[])
+int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
 {
-    Configuration::Initialize(argc, argv);
+    UNREFERENCED_PARAMETER(hInst);
+    UNREFERENCED_PARAMETER(hInstPrev);
+    UNREFERENCED_PARAMETER(cmdline);
+    UNREFERENCED_PARAMETER(cmdshow);
+
+    Configuration::Initialize();
 
     Logger::Info(L"##################################################################################");
     Logger::Info(L"Execute launch bounce");

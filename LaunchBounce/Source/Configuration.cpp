@@ -19,22 +19,79 @@
 
 using Therena::LaunchBounce::Configuration;
 
-void Configuration::Initialize(int argc, wchar_t* argv[])
+void Configuration::Initialize()
 {
-    if (0 == argc || argc % 2 == 0)
-    {
-        return;
-    }
+    const auto commandLineString = GetCommandLine();
+    const auto commandLine = ParseCommandLine(commandLineString);
 
-    for (auto i = 1; i < argc; i = i + 2)
+    for (const auto& param : commandLine)
     {
         auto type = ParameterType::Unknown;
-        const auto result = ConvertParameterType(argv[i], type);
+        const auto result = ConvertParameterType(param.first, type);
         if (result)
         {
-            m_Parameters[type] = argv[i + 1];
+            m_Parameters[type] = param.second;
         }
     }
+}
+
+std::vector<std::pair<std::wstring, std::wstring>> Configuration::ParseCommandLine(const std::wstring& commandLine)
+{
+    std::vector<std::pair<std::wstring, std::wstring>> params;
+    std::wistringstream iss(commandLine);
+    std::wstring token;
+    std::wstring key;
+    std::wstring value;
+
+    bool isFirstToken = true;
+    bool isQuotedValue = false;
+    while (iss >> token)
+    {
+        if (isFirstToken)
+        {
+            isFirstToken = false;
+            continue;
+        }
+
+        if (isQuotedValue)
+        {
+            if (token.back() == L'"')
+            {
+                value += L" " + token.substr(0, token.length() - 1);
+                isQuotedValue = false;
+                params.push_back({ key, value });
+                value.clear();
+            }
+            else
+            {
+                value += L" " + token;
+            }
+        }
+        else if (token.front() == L'"')
+        {
+            value = token.substr(1);
+            if (token.back() != L'"')
+            {
+                isQuotedValue = true;
+            }
+            else
+            {
+                value.pop_back();
+                params.push_back({ key, value });
+                value.clear();
+            }
+        }
+        else if (token.front() == L'-' && !isQuotedValue)
+        {
+            key = token;
+        }
+        else
+        {
+            params.push_back({ key, token });
+        }
+    }
+
+    return params;
 }
 
 bool Configuration::GetParameter(ParameterType type, std::wstring& parameter)
@@ -60,6 +117,13 @@ bool Configuration::ConvertParameterType(const std::wstring& parameter, Paramete
     if (std::wstring::npos != parameter.find(L"Parameter"))
     {
         type = ParameterType::Parameter;
+        return true;
+    }
+
+
+    if (std::wstring::npos != parameter.find(L"Hide"))
+    {
+        type = ParameterType::Hide;
         return true;
     }
 
